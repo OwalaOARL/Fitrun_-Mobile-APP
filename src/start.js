@@ -15,9 +15,7 @@ const Start = () => {
       {/* Illustration Section */}
       <View style={styles.imageContainer}>
         <Image
-          source={{
-            uri: "https://example.com/fitness-illustration.png", // Replace with actual image URL
-          }}
+          source={require("../assets/fit.jpg")} // Correct path to the local image
           style={styles.image}
         />
       </View>
