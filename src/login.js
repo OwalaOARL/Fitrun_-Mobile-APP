@@ -1,71 +1,122 @@
-import React from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, KeyboardAvoidingView, Platform } from 'react-native';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = () => {
+    // Handle login logic here
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ImageBackground
+        source={{ uri: 'https://example.com/your-background-image-url.jpg' }} // Replace with your background image URL
+        style={styles.background}
+      >
+        <View style={styles.overlay}>
+          <Text style={styles.title}>Welcome Back</Text>
+          <Text style={styles.subtitle}>Please log in to continue</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Enter email or user name"
-        placeholderTextColor="#B5B5B5"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#B5B5B5"
-        secureTextEntry={true}
-      />
+          <View style={styles.form}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Sign In</Text>
-      </TouchableOpacity>
-    </View>
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
+              <Text style={styles.buttonText}>Log In</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.signupText}>
+              Don't have an account? <Text style={styles.signupLink}>Sign Up</Text>
+            </Text>
+          </View>
+        </View>
+      </ImageBackground>
+    </KeyboardAvoidingView>
   );
 };
-
-export default Login;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F3F1FA",
+  },
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#6C63FF', // Dark overlay
     padding: 20,
   },
   title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "#6C63FF",
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 18,
+    color: '#fff',
     marginBottom: 30,
   },
-  input: {
-    width: "100%",
-    height: 50,
-    backgroundColor: "#FFFFFF",
+  form: {
+    width: '100%',
+    maxWidth: 400,
+    padding: 20,
     borderRadius: 10,
-    paddingHorizontal: 15,
-    marginBottom: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+  },
+  input: {
+    height: 50,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingLeft: 15,
+    marginBottom: 20,
     fontSize: 16,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    backgroundColor: '#fff',
   },
   button: {
-    width: "100%",
-    height: 50,
-    backgroundColor: "#6C63FF",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: '#6a5acd', // Violet color
+    paddingVertical: 15,
     borderRadius: 10,
-    marginTop: 20,
+    marginBottom: 20,
+    alignItems: 'center',
   },
   buttonText: {
-    color: "#FFFFFF",
+    color: '#fff',
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
+  },
+  signupText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#555',
+  },
+  signupLink: {
+    color: '#6a5acd', // Violet color
+    fontWeight: 'bold',
   },
 });
+
+export default Login;

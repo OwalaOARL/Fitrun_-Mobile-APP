@@ -15,7 +15,7 @@ const Start = () => {
       {/* Illustration Section */}
       <View style={styles.imageContainer}>
         <Image
-          source={require("../assets/fit.jpg")} // Correct path to the local image
+          source={require("../assets/fit.png")} // Correct path to the local image
           style={styles.image}
         />
       </View>
