@@ -10,12 +10,13 @@ const Start = () => {
         <Text style={styles.subtitle}>
           We always want you to stay fit at every stage of your life!
         </Text>
+        
       </View>
 
       {/* Illustration Section */}
       <View style={styles.imageContainer}>
         <Image
-          source={require("../assets/fit.jpg")} // Correct path to the local image
+          source={require("../assets/fit.png")} // Correct path to the local image
           style={styles.image}
         />
       </View>
