@@ -1,85 +1,94 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 
-const Login = ({ navigation }) => {
-  const [username, setUsername] = useState('');
+const Login = () => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [usernameError, setUsernameError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const validateFields = () => {
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+    return emailRegex.test(email);
+  };
+  
+  
+
+  const handleLogin = () => {
     let valid = true;
 
-    if (!username) {
-      setUsernameError('This field is required');
+    if (!validateEmail(email)) {
+      setEmailError('Please enter a valid email address');
       valid = false;
     } else {
-      setUsernameError('');
+      setEmailError('');
     }
 
-    if (!password) {
-      setPasswordError('This field is required');
+    if (password.trim() === '') {
+      setPasswordError('Password cannot be empty');
       valid = false;
-    } else if (password.length > 8) {
-      setPasswordError('Password must be a maximum of 8 characters');
+    } else if (password.length < 6) {
+      setPasswordError('Password must be at least 6 characters');
       valid = false;
     } else {
       setPasswordError('');
     }
 
-    return valid;
-  };
-
-  const handleLogin = () => {
-    if (validateFields()) {
-      navigation.navigate('Home');
+    if (valid) {
+      Alert.alert('Login Successful', 'Welcome back!');
+      // Handle login logic here
     }
   };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <View style={styles.formContainer}>
-        <Text style={styles.title}>Welcome Back!</Text>
-        <Text style={styles.subtitle}>Log in to your account</Text>
+      <ImageBackground
+        source={{ uri: 'https://example.com/your-background-image-url.jpg' }} // Replace with your background image URL
+        style={styles.background}
+      >
+        <View style={styles.overlay}>
+          <Text style={styles.title}>Welcome Back</Text>
+          <Text style={styles.subtitle}>Please log in to continue</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={username}
-          onChangeText={setUsername}
-        />
-        {usernameError ? <Text style={styles.errorText}>{usernameError}</Text> : null}
+          <View style={styles.form}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={(text) => {
+                setEmail(text);
+                setEmailError('');
+              }}
+              keyboardType="email-address"
+            />
+            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+            
 
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={(text) => {
+                setPassword(text);
+                setPasswordError('');
+              }}
+              secureTextEntry
+            />
+            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
 
-        <Text style={styles.forgotPassword} onPress={() => navigation.navigate('ForgotPassword')}>
-          Forgot Password?
-        </Text>
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
+              <Text style={styles.buttonText}>Log In</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Log In</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.signupText}>
-          Don’t have an account?{' '}
-          <Text
-            style={styles.signupLink}
-            onPress={() => navigation.navigate('SignUp')}
-          >
-            Sign Up
-          </Text>
-        </Text>
-      </View>
+            <Text style={styles.signupText}>
+              Don't have an account? <Text style={styles.signupLink}>Sign Up</Text>
+            </Text>
+          </View>
+        </View>
+      </ImageBackground>
     </KeyboardAvoidingView>
   );
 };
@@ -87,76 +96,72 @@ const Login = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
+  overlay: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#6C63FF',
-  },
-  formContainer: {
-    width: '90%',
-    maxWidth: 400,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: '#6C63FF', // Dark overlay
     padding: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 10,
-    elevation: 5,
   },
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#6C63FF',
-    textAlign: 'center',
+    color: '#fff',
     marginBottom: 10,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#6C63FF',
-    textAlign: 'center',
-    marginBottom: 20,
+    fontSize: 18,
+    color: '#fff',
+    marginBottom: 30,
+  },
+  form: {
+    width: '100%',
+    maxWidth: 400,
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },
   input: {
     height: 50,
+    borderColor: '#ddd',
     borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 15,
+    borderRadius: 10,
+    paddingLeft: 15,
+    marginBottom: 5,
     fontSize: 16,
-    backgroundColor: '#F9F9F9',
-  },
-  button: {
-    backgroundColor: '#6A5ACD',
-    borderRadius: 8,
-    paddingVertical: 15,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  forgotPassword: {
-    fontSize: 14,
-    color: '#6A5ACD',
-    textAlign: 'right',
-    marginBottom: 20,
-  },
-  signupText: {
-    fontSize: 14,
-    color: '#666666',
-    textAlign: 'center',
-  },
-  signupLink: {
-    color: '#6A5ACD',
-    fontWeight: 'bold',
+    backgroundColor: '#fff',
   },
   errorText: {
-    color: '#FF6F61',
-    fontSize: 12,
+    fontSize: 14,
+    color: 'red',
     marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#6a5acd', // Violet color
+    paddingVertical: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  signupText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#555',
+  },
+  signupLink: {
+    color: '#6a5acd', // Violet color
+    fontWeight: 'bold',
   },
 });
 
